@@ -1,0 +1,23 @@
+name: "Upload Ghost Theme On Push"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload-theme:
+    name: "upload theme"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18.12
+      - run: yarn
+      - name: "Build and Upload"
+        env:
+          GHOST_ADMIN_API_KEY: "${{ secrets.GHOST_ADMIN_API_KEY }}"
+          GHOST_URL: "${{ secrets.GHOST_URL }}"
+        run: yarn prod
